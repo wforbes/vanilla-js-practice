@@ -73,6 +73,9 @@ function renderListItem(item) {
 	title.appendChild(textNode);
 	listItem.appendChild(title);
 
+	let deleteButton = createDeleteButton();
+	listItem.appendChild(deleteButton);
+
 	itemList.appendChild(listItem);
 
 	if (item.done) {
@@ -97,5 +100,21 @@ function handleCheckboxChange(event) {
 	listItemElement.querySelector(".title").style.textDecoration = (listItem.done)
 		? "line-through"
 		: "none";
+	saveListItems();
+}
+
+function createDeleteButton() {
+	let deleteButton = document.createElement("input");
+	deleteButton.type = "button";
+	deleteButton.value = "❌";
+	deleteButton.classList.add("delete-btn");
+	deleteButton.addEventListener("click", handleDeleteClick);
+	return deleteButton;
+}
+
+function handleDeleteClick(event) {
+	let listItemElementId = event.target.parentElement.id;
+	event.target.parentElement.remove();
+	listItems = listItems.filter(item => item.id !== listItemElementId);
 	saveListItems();
 }
