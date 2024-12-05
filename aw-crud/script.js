@@ -62,24 +62,33 @@ function handleKeypress(event) {
 function renderListItem(item) {
 	let listItem = document.createElement("li");
 	listItem.classList.add("list-item");
+	listItem.id = item.id;
 	let textNode = document.createTextNode(item.text);
 	let itemCheckbox = createItemCheckbox(item);
 	listItem.appendChild(itemCheckbox);
 	listItem.appendChild(textNode);
 	itemList.appendChild(listItem);
+	if (item.done) {
+		listItem.style.textDecoration = "line-through";
+	} else {
+		listItem.style.textDecoration = "none";
+	}
 }
 
 function createItemCheckbox(item) {
 	let newItemCheckbox = document.createElement("input");
 	newItemCheckbox.type = "checkbox";
-	newItemCheckbox.id = item.id;
 	newItemCheckbox.checked = item.done;
 	newItemCheckbox.addEventListener("change", handleCheckboxChange);
 	return newItemCheckbox;
 }
 
 function handleCheckboxChange(event) {
-	let listItem = listItems.find(item => item.id === event.target.id);
+	let listItemElement = event.target.parentElement;
+	let listItem = listItems.find(item => item.id === listItemElement.id);
 	listItem.done = event.target.checked;
+	listItemElement.style.textDecoration = (listItem.done)
+		? "line-through"
+		: "none";
 	saveListItems();
 }
