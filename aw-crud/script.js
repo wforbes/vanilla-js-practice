@@ -26,19 +26,11 @@ function setupSessionStorage() {
 function renderListItems() {
 	itemList.innerHTML = "";
 	/* // array forEach() method 
-	listItems.forEach((item) => {
-		let newListItem = document.createElement("li");
-		newListItem.classList.add("list-item");
-		newListItem.textContent = item;
-		itemList.appendChild(newListItem);
-	});
+	listItems.forEach(renderListItem);
 	*/
 	// classic for loop
 	for (let i = 0; i < listItems.length; i++) {
-		let newListItem = document.createElement("li");
-		newListItem.classList.add("list-item");
-		newListItem.textContent = listItems[i];
-		itemList.appendChild(newListItem);
+		renderListItem(listItems[i]);
 	}
 }
 
@@ -49,14 +41,7 @@ function saveListItems() {
 function handleClick() {
 	let listItemText = inputText.value;
 	if (!listItemText || listItemText === "") return;
-
-	let newListItem = document.createElement("li");
-	newListItem.classList.add("list-item");
-	let newContent = document.createTextNode(listItemText);
-
-	newListItem.appendChild(newContent);
-	itemList.appendChild(newListItem);
-
+	renderListItem(listItemText);
 	inputText.value = "";
 	listItems.push(listItemText);
 	saveListItems();
@@ -68,3 +53,10 @@ function handleKeypress(event) {
 	}
 }
 
+function renderListItem(itemText) {
+	let listItem = document.createElement("li");
+	listItem.classList.add("list-item");
+	let textNode = document.createTextNode(itemText);
+	listItem.appendChild(textNode);
+	itemList.appendChild(listItem);
+}
