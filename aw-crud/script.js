@@ -25,12 +25,21 @@ function setupSessionStorage() {
 
 function renderListItems() {
 	itemList.innerHTML = "";
+	/* // array forEach() method 
 	listItems.forEach((item) => {
 		let newListItem = document.createElement("li");
 		newListItem.classList.add("list-item");
 		newListItem.textContent = item;
 		itemList.appendChild(newListItem);
 	});
+	*/
+	// classic for loop
+	for (let i = 0; i < listItems.length; i++) {
+		let newListItem = document.createElement("li");
+		newListItem.classList.add("list-item");
+		newListItem.textContent = listItems[i];
+		itemList.appendChild(newListItem);
+	}
 }
 
 function saveListItems() {
