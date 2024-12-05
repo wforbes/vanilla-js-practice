@@ -158,6 +158,7 @@ function handleEditClick(event) {
 	inputElement.type = "text";
 	inputElement.classList.add("edit-txt");
 	inputElement.value = listItems[editIdx].text;
+	inputElement.addEventListener("keypress", handleEditFieldKeypress);
 	titleElement.appendChild(inputElement);
 	inputElement.focus();
 	let editBtnElement = listItemElement.querySelector(".edit-btn");
@@ -189,11 +190,12 @@ function handleSaveClick(event) {
 	let saveIdx = listItems.findIndex(item => item.id === listItemId);
 	if (saveIdx === -1) return;
 	let updatedTitle = listItemElement.querySelector("input.edit-txt").value;
-	console.log(updatedTitle);
 	if (!updatedTitle || updatedTitle === "") return;
 	listItems[saveIdx].text = updatedTitle;
 	let titleElement = listItemElement.querySelector(".title");
-	titleElement.innerHTML = "";
+	let editField = titleElement.querySelector("input.edit-txt");
+	editField.removeEventListener("keypress", handleEditFieldKeypress);
+	editField.remove();
 	let textNode = document.createTextNode(listItems[saveIdx].text);
 	titleElement.appendChild(textNode);
 	delete listItems[saveIdx].editing;
@@ -203,4 +205,10 @@ function handleSaveClick(event) {
 	editBtnElement.removeEventListener("click", handleSaveClick);
 	editBtnElement.addEventListener("click", handleEditClick);
 	saveListItems();
+}
+
+function handleEditFieldKeypress(event) {
+	if (event.key === "Enter") {
+		handleSaveClick(event);
+	}
 }
