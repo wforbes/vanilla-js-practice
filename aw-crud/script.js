@@ -175,8 +175,7 @@ function handleSaveClick(event) {
 	let listItemId = listItemElement.id;
 	let saveIdx = listItems.findIndex(item => item.id === listItemId);
 	if (saveIdx === -1) return;
-	let updatedTitle = listItemElement
-		.querySelector("input.edit-txt").value;
+	let updatedTitle = listItemElement.querySelector("input.edit-txt").value;
 	console.log(updatedTitle);
 	if (!updatedTitle || updatedTitle === "") return;
 	listItems[saveIdx].text = updatedTitle;

@@ -72,7 +72,7 @@ main {
 #item-list {
 	list-style-type: none;
 	padding: 0;
-	width: 50%;
+	width: 60%;
 	margin: 1em auto;
 }
 @media screen and (max-width: 768px) {
@@ -89,6 +89,7 @@ main {
 	border-radius: 0.5em;
 	border: 0.15em solid #000;
 	border-bottom: 0.25em solid #000;
+	min-height: 1.5em;
 }
 
 #item-list>li>span.title {
@@ -106,6 +107,14 @@ main {
 	background-color: #fff;
 	border: 0.15em solid #000;
 	border-radius: 0.5em;
+}
+
+#item-list>li>.title>input.edit-txt {
+	height: 2.0em;
+	border-radius: 0.5em;
+	padding: 0 0.15em;
+	font-size: 1em;
+	font-weight: bold;
 }
 
 footer {
