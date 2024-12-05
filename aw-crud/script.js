@@ -3,6 +3,7 @@ let inputButton = document.querySelector("#add-btn");
 let itemList = document.querySelector("#item-list");
 
 let listItems = [];
+let nextItemId = 0;
 let sessionStorageKey = "listItems";
 let savedListItems = sessionStorage.getItem(sessionStorageKey);
 
@@ -18,6 +19,7 @@ function setupSessionStorage() {
 	if (savedListItems) {
 		listItems = JSON.parse(savedListItems);
 		renderListItems();
+		setNextItemId();
 	} else {
 		sessionStorage.setItem(sessionStorageKey, JSON.stringify(listItems));
 	}
@@ -34,6 +36,15 @@ function renderListItems() {
 	}
 }
 
+function setNextItemId() {
+	for (let i = 0; i < listItems.length; i++) {
+		let idNum = +listItems[i].id.split('-')[1];
+		if (idNum > nextItemId) nextItemId = idNum;
+	}
+	nextItemId++;
+	return nextItemId;
+}
+
 function saveListItems() {
 	sessionStorage.setItem(sessionStorageKey, JSON.stringify(listItems));
 }
@@ -42,7 +53,7 @@ function handleClick() {
 	let listItemText = inputText.value;
 	if (!listItemText || listItemText === "") return;
 	let listItem = {
-		id: 'item-' + listItems.length,
+		id: 'item-' + nextItemId++,
 		text: listItemText,
 		done: false
 	};
@@ -122,16 +133,17 @@ function createEditButton() {
 
 function handleEditClick(event) {
 	//if already editing, cancel that edit and begin this one
-	let editingItemIdx = listItems.findIndex(item => item.editing);
+	let editingItemIdx = listItems.findIndex(item => item?.editing === true);
 	if (editingItemIdx !== -1) {
-		listItems[editingItemIdx].editing = false;
 		listItems[editingItemIdx].text = listItems[editingItemIdx].originalText;
+		delete listItems[editingItemIdx].editing;
+		delete listItems[editingItemIdx].originalText;
 		let editingListItem = document.getElementById(listItems[editingItemIdx].id)
 		editingListItem.querySelector(".title").textContent = listItems[editingItemIdx].text;
 		let editBtnElement = editingListItem.querySelector(".edit-btn");
 		editBtnElement.value = "✏️";
-		editBtnElement.removeEventListener("click", handleEditClick);
-		editBtnElement.addEventListener("click", handleSaveClick);
+		editBtnElement.removeEventListener("click", handleSaveClick);
+		editBtnElement.addEventListener("click", handleEditClick);
 		saveListItems();
 	}
 
@@ -150,6 +162,7 @@ function handleEditClick(event) {
 	inputElement.focus();
 	let editBtnElement = listItemElement.querySelector(".edit-btn");
 	editBtnElement.value = "💾";
+	editBtnElement.removeEventListener("click", handleEditClick);
 	editBtnElement.addEventListener("click", handleSaveClick);
 	saveListItems();
 }
