@@ -73,8 +73,16 @@ function renderListItem(item) {
 	title.appendChild(textNode);
 	listItem.appendChild(title);
 
+	let btnContainer = document.createElement("div");
+	btnContainer.classList.add("btn-container");
+
+	let editButton = createEditButton();
+	btnContainer.appendChild(editButton);
+
 	let deleteButton = createDeleteButton();
-	listItem.appendChild(deleteButton);
+	btnContainer.appendChild(deleteButton);
+
+	listItem.appendChild(btnContainer);
 
 	itemList.appendChild(listItem);
 
@@ -103,6 +111,49 @@ function handleCheckboxChange(event) {
 	saveListItems();
 }
 
+function createEditButton() {
+	let editButton = document.createElement("input");
+	editButton.type = "button";
+	editButton.value = "✏️";
+	editButton.classList.add("edit-btn");
+	editButton.addEventListener("click", handleEditClick);
+	return editButton;
+}
+
+function handleEditClick(event) {
+	//if already editing, cancel that edit and begin this one
+	let editingItemIdx = listItems.findIndex(item => item.editing);
+	if (editingItemIdx !== -1) {
+		listItems[editingItemIdx].editing = false;
+		listItems[editingItemIdx].text = listItems[editingItemIdx].originalText;
+		let editingListItem = document.getElementById(listItems[editingItemIdx].id)
+		editingListItem.querySelector(".title").textContent = listItems[editingItemIdx].text;
+		let editBtnElement = editingListItem.querySelector(".edit-btn");
+		editBtnElement.value = "✏️";
+		editBtnElement.removeEventListener("click", handleEditClick);
+		editBtnElement.addEventListener("click", handleSaveClick);
+		saveListItems();
+	}
+
+	let listItemElement = event.target.parentElement.parentElement;
+	let editIdx = listItems.findIndex(item => item.id === listItemElement.id);
+	if (editIdx === -1) return;
+	listItems[editIdx].editing = true;
+	listItems[editIdx].originalText = listItems[editIdx].text;
+	let titleElement = listItemElement.querySelector(".title");
+	titleElement.textContent = "";
+	let inputElement = document.createElement("input");
+	inputElement.type = "text";
+	inputElement.classList.add("edit-txt");
+	inputElement.value = listItems[editIdx].text;
+	titleElement.appendChild(inputElement);
+	inputElement.focus();
+	let editBtnElement = listItemElement.querySelector(".edit-btn");
+	editBtnElement.value = "💾";
+	editBtnElement.addEventListener("click", handleSaveClick);
+	saveListItems();
+}
+
 function createDeleteButton() {
 	let deleteButton = document.createElement("input");
 	deleteButton.type = "button";
@@ -113,8 +164,31 @@ function createDeleteButton() {
 }
 
 function handleDeleteClick(event) {
-	let listItemElementId = event.target.parentElement.id;
-	event.target.parentElement.remove();
+	let listItemElementId = event.target.parentElement.parentElement.id;
+	event.target.parentElement.parentElement.remove();
 	listItems = listItems.filter(item => item.id !== listItemElementId);
+	saveListItems();
+}
+
+function handleSaveClick(event) {
+	let listItemElement = event.target.parentElement.parentElement;
+	let listItemId = listItemElement.id;
+	let saveIdx = listItems.findIndex(item => item.id === listItemId);
+	if (saveIdx === -1) return;
+	let updatedTitle = listItemElement
+		.querySelector("input.edit-txt").value;
+	console.log(updatedTitle);
+	if (!updatedTitle || updatedTitle === "") return;
+	listItems[saveIdx].text = updatedTitle;
+	let titleElement = listItemElement.querySelector(".title");
+	titleElement.innerHTML = "";
+	let textNode = document.createTextNode(listItems[saveIdx].text);
+	titleElement.appendChild(textNode);
+	delete listItems[saveIdx].editing;
+	delete listItems[saveIdx].originalText;
+	let editBtnElement = listItemElement.querySelector(".edit-btn");
+	editBtnElement.value = "✏️";
+	editBtnElement.removeEventListener("click", handleSaveClick);
+	editBtnElement.addEventListener("click", handleEditClick);
 	saveListItems();
 }

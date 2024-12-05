@@ -96,10 +96,14 @@ main {
 	margin-left: 1em;
 }
 
-#item-list>li>input.delete-btn {
-	margin-left: 1em;
-	background-color: #fff;
+#item-list>li>div.btn-container {
+	display: flex;
+	flex-direction: row;
 	float: right;
+}
+
+#item-list>li>.btn-container>input {
+	background-color: #fff;
 	border: 0.15em solid #000;
 	border-radius: 0.5em;
 }
