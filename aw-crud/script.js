@@ -63,15 +63,22 @@ function renderListItem(item) {
 	let listItem = document.createElement("li");
 	listItem.classList.add("list-item");
 	listItem.id = item.id;
-	let textNode = document.createTextNode(item.text);
+	
 	let itemCheckbox = createItemCheckbox(item);
 	listItem.appendChild(itemCheckbox);
-	listItem.appendChild(textNode);
+
+	let title = document.createElement("span");
+	title.classList.add("title");
+	let textNode = document.createTextNode(item.text);
+	title.appendChild(textNode);
+	listItem.appendChild(title);
+
 	itemList.appendChild(listItem);
+
 	if (item.done) {
-		listItem.style.textDecoration = "line-through";
+		title.style.textDecoration = "line-through";
 	} else {
-		listItem.style.textDecoration = "none";
+		title.style.textDecoration = "none";
 	}
 }
 
@@ -87,7 +94,7 @@ function handleCheckboxChange(event) {
 	let listItemElement = event.target.parentElement;
 	let listItem = listItems.find(item => item.id === listItemElement.id);
 	listItem.done = event.target.checked;
-	listItemElement.style.textDecoration = (listItem.done)
+	listItemElement.querySelector(".title").style.textDecoration = (listItem.done)
 		? "line-through"
 		: "none";
 	saveListItems();
