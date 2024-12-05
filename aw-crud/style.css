@@ -120,6 +120,11 @@ main {
 	padding: 0 0.15em;
 	font-size: 1em;
 	font-weight: bold;
+	width: fit-content;
+}
+#item-list>li>.btn-container>.save-success-icon {
+	opacity: 0;
+	transition: all 1s;
 }
 
 footer, .push {

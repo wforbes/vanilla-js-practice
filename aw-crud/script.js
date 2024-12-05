@@ -80,12 +80,19 @@ function renderListItem(item) {
 
 	let title = document.createElement("span");
 	title.classList.add("title");
+	title.addEventListener("click", handleTitleClick);
 	let textNode = document.createTextNode(item.text);
 	title.appendChild(textNode);
+	
 	listItem.appendChild(title);
 
 	let btnContainer = document.createElement("div");
 	btnContainer.classList.add("btn-container");
+
+	let saveSuccessIcon = document.createElement("span");
+	saveSuccessIcon.classList.add("save-success-icon");
+	saveSuccessIcon.textContent = "✅";
+	btnContainer.appendChild(saveSuccessIcon);
 
 	let editButton = createEditButton();
 	btnContainer.appendChild(editButton);
@@ -122,6 +129,12 @@ function handleCheckboxChange(event) {
 	saveListItems();
 }
 
+function handleTitleClick(event) {
+	cancelPendingEdit();
+	let listItemElement = event.target.parentElement;
+	startPendingEdit(listItemElement);
+}
+
 function createEditButton() {
 	let editButton = document.createElement("input");
 	editButton.type = "button";
@@ -133,6 +146,13 @@ function createEditButton() {
 
 function handleEditClick(event) {
 	//if already editing, cancel that edit and begin this one
+	cancelPendingEdit();
+
+	let listItemElement = event.target.parentElement.parentElement;
+	startPendingEdit(listItemElement);
+}
+
+function cancelPendingEdit() {
 	let editingItemIdx = listItems.findIndex(item => item?.editing === true);
 	if (editingItemIdx !== -1) {
 		listItems[editingItemIdx].text = listItems[editingItemIdx].originalText;
@@ -146,14 +166,16 @@ function handleEditClick(event) {
 		editBtnElement.addEventListener("click", handleEditClick);
 		saveListItems();
 	}
+}
 
-	let listItemElement = event.target.parentElement.parentElement;
+function startPendingEdit(listItemElement) {
 	let editIdx = listItems.findIndex(item => item.id === listItemElement.id);
 	if (editIdx === -1) return;
 	listItems[editIdx].editing = true;
 	listItems[editIdx].originalText = listItems[editIdx].text;
 	let titleElement = listItemElement.querySelector(".title");
 	titleElement.textContent = "";
+	titleElement.removeEventListener("click", handleTitleClick);
 	let inputElement = document.createElement("input");
 	inputElement.type = "text";
 	inputElement.classList.add("edit-txt");
@@ -193,6 +215,7 @@ function handleSaveClick(event) {
 	if (!updatedTitle || updatedTitle === "") return;
 	listItems[saveIdx].text = updatedTitle;
 	let titleElement = listItemElement.querySelector(".title");
+	titleElement.addEventListener("click", handleTitleClick);
 	let editField = titleElement.querySelector("input.edit-txt");
 	editField.removeEventListener("keypress", handleEditFieldKeypress);
 	editField.remove();
@@ -200,7 +223,15 @@ function handleSaveClick(event) {
 	titleElement.appendChild(textNode);
 	delete listItems[saveIdx].editing;
 	delete listItems[saveIdx].originalText;
+
 	let editBtnElement = listItemElement.querySelector(".edit-btn");
+
+	let saveSuccessIcon = editBtnElement.parentElement.querySelector(".save-success-icon");
+	saveSuccessIcon.style.opacity = "1";
+	setTimeout(() => {
+		saveSuccessIcon.style.opacity = "0";
+	}, 2000);
+
 	editBtnElement.value = "✏️";
 	editBtnElement.removeEventListener("click", handleSaveClick);
 	editBtnElement.addEventListener("click", handleEditClick);
