@@ -41,9 +41,15 @@ function saveListItems() {
 function handleClick() {
 	let listItemText = inputText.value;
 	if (!listItemText || listItemText === "") return;
-	renderListItem(listItemText);
+	let listItem = {
+		id: 'item-' + listItems.length,
+		text: listItemText,
+		done: false
+	};
+
+	renderListItem(listItem);
 	inputText.value = "";
-	listItems.push(listItemText);
+	listItems.push(listItem);
 	saveListItems();
 }
 
@@ -53,10 +59,27 @@ function handleKeypress(event) {
 	}
 }
 
-function renderListItem(itemText) {
+function renderListItem(item) {
 	let listItem = document.createElement("li");
 	listItem.classList.add("list-item");
-	let textNode = document.createTextNode(itemText);
+	let textNode = document.createTextNode(item.text);
+	let itemCheckbox = createItemCheckbox(item);
+	listItem.appendChild(itemCheckbox);
 	listItem.appendChild(textNode);
 	itemList.appendChild(listItem);
+}
+
+function createItemCheckbox(item) {
+	let newItemCheckbox = document.createElement("input");
+	newItemCheckbox.type = "checkbox";
+	newItemCheckbox.id = item.id;
+	newItemCheckbox.checked = item.done;
+	newItemCheckbox.addEventListener("change", handleCheckboxChange);
+	return newItemCheckbox;
+}
+
+function handleCheckboxChange(event) {
+	let listItem = listItems.find(item => item.id === event.target.id);
+	listItem.done = event.target.checked;
+	saveListItems();
 }
