@@ -10,6 +10,7 @@ init();
 
 function init() {
 	inputButton.addEventListener("click", handleClick);
+	inputText.addEventListener("keypress", handleKeypress);
 	setupSessionStorage();
 }
 
@@ -51,3 +52,10 @@ function handleClick() {
 	listItems.push(listItemText);
 	saveListItems();
 }
+
+function handleKeypress(event) {
+	if (event.key === "Enter") {
+		handleClick();
+	}
+}
+
