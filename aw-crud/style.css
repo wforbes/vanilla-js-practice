@@ -26,7 +26,7 @@ main {
 	flex-direction: column;
 	
 	align-items: center;
-	width: 50%;
+	width: 100%;
 	min-height: 80vh;
 	margin: 0 auto;
 	
@@ -77,12 +77,17 @@ main {
 #item-list {
 	list-style-type: none;
 	padding: 0;
-	width: 60%;
+	width: 30%;
 	margin: 1em auto;
+}
+@media screen and (max-width: 1280px) {
+	#item-list {
+		width: 50%;
+	}
 }
 @media screen and (max-width: 768px) {
 	#item-list {
-		width: 90%;
+		width: 80%;
 	}
 }
 
@@ -95,6 +100,11 @@ main {
 	border: 0.15em solid #000;
 	border-bottom: 0.25em solid #000;
 	min-height: 1.5em;
+}
+
+#item-list>li.item-empty {
+	font-weight: bold;
+	text-align: center;
 }
 
 #item-list>li>span.title {

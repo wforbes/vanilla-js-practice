@@ -13,6 +13,7 @@ function init() {
 	inputButton.addEventListener("click", handleClick);
 	inputText.addEventListener("keypress", handleKeypress);
 	setupSessionStorage();
+	if (listItems.length === 0) addEmptyListItem();
 }
 
 function setupSessionStorage() {
@@ -22,6 +23,16 @@ function setupSessionStorage() {
 		setNextItemId();
 	} else {
 		sessionStorage.setItem(sessionStorageKey, JSON.stringify(listItems));
+	}
+}
+
+function addEmptyListItem() {
+	document.querySelector("#item-list").innerHTML = "<li class='item-empty'>No items yet. Add one!</li>";
+}
+
+function removeEmptyListItem() {
+	if (document.querySelector("#item-list li.item-empty")) {
+		document.querySelector("#item-list li.item-empty").remove();
 	}
 }
 
@@ -71,6 +82,7 @@ function handleKeypress(event) {
 }
 
 function renderListItem(item) {
+	removeEmptyListItem();
 	let listItem = document.createElement("li");
 	listItem.classList.add("list-item");
 	listItem.id = item.id;
@@ -204,6 +216,7 @@ function handleDeleteClick(event) {
 	event.target.parentElement.parentElement.remove();
 	listItems = listItems.filter(item => item.id !== listItemElementId);
 	saveListItems();
+	if (listItems.length === 0) addEmptyListItem();
 }
 
 function handleSaveClick(event) {
