@@ -13,12 +13,17 @@ header {
 	padding: 1em;
 }
 
+section h2 {
+	text-align: center;
+}
+
 #project-list {
 	display: flex;
 	flex-direction: column;
 	list-style: none;
 	box-sizing: border-box;
 	padding: 0;
+	margin: 0 auto;
 }
 
 @media screen and (max-width: 768px) {
@@ -31,8 +36,14 @@ header {
 	display: flex;
 	box-sizing: border-box;
 	margin-bottom: 0.5em;
-	width: 60%;
+	width: 30%;
 	margin: 0 auto;
+}
+
+@media screen and (max-width: 768px) {
+	#project-list li {
+		width: 80%;
+	}
 }
 
 #project-list li .project-container {
