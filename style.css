@@ -21,30 +21,41 @@ section h2 {
 	display: flex;
 	flex-direction: column;
 	list-style: none;
-	box-sizing: border-box;
 	padding: 0;
 	margin: 0 auto;
-}
-
-@media screen and (max-width: 768px) {
-	#project-list {
-		width: 90%;
-	}
+	width: 100%;
 }
 
 #project-list li {
 	display: flex;
 	box-sizing: border-box;
-	margin-bottom: 0.5em;
-	width: 30%;
-	margin: 0 auto;
+	width: 99%;
+	margin: 0.5em auto;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (min-width: 768px) {
 	#project-list li {
-		width: 80%;
+		width: 60%;
 	}
 }
+
+@media screen and (min-width: 1024px) {
+	#project-list li {
+		width: 50%;
+	}
+}
+
+@media screen and (min-width: 1280px) {
+	#project-list li {
+		width: 40%;
+	}
+}
+
+
+
+
+
+
 
 #project-list li .project-container {
 	display: flex;
